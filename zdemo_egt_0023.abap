@@ -1,15 +1,27 @@
-REPORT zdemo_demo.
+REPORT zdemo_egt_0023.
 
-DATA: gt_scarr TYPE TABLE OF scarr,
-      gs_scarr TYPE scarr.
-
-FIELD-SYMBOLS: <gfs_scarr> TYPE scarr.
-
+TABLES: scarr.
+*DATA: gs_scarr TYPE scarr.
 
 START-OF-SELECTION.
 
-  SELECT * FROM scarr
-    INTO TABLE gt_scarr.
+  SELECT * FROM scarr WHERE currcode EQ 'EUR'.
+  ENDSELECT.
+  BREAK-POINT.
+*SELECT * FROM scarr INTO gs_scarr.
+*
+*ENDSELECT.
+
+*DATA: gt_scarr TYPE TABLE OF scarr,
+*      gs_scarr TYPE scarr.
+*
+*FIELD-SYMBOLS: <gfs_scarr> TYPE scarr.
+*
+*
+
+*
+*  SELECT * FROM scarr
+*    INTO TABLE gt_scarr.
 
 *  LOOP AT gt_scarr INTO gs_scarr.
 *    IF gs_scarr-carrid EQ 'LH'.
@@ -27,10 +39,10 @@ START-OF-SELECTION.
 *READ TABLE gt_scarr INTO gs_scarr WITH KEY carrid = 'LH'.
 *gs_scarr-carrname = 'Hakan Özcan'.
 
-  READ TABLE gt_scarr ASSIGNING <gfs_scarr> WITH KEY carrid = 'LH'.
-  <gfs_scarr>-carrname = 'Hakan Özcan'.
-
-  BREAK-POINT.
+*  READ TABLE gt_scarr ASSIGNING <gfs_scarr> WITH KEY carrid = 'LH'.
+*  <gfs_scarr>-carrname = 'Hakan Özcan'.
+*
+*  BREAK-POINT.
 
 *TYPES: BEGIN OF gty_type1,
 *         col1 TYPE char10,
