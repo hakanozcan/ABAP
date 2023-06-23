@@ -9,6 +9,7 @@
 *  -->  p1        text
 *  <--  p2        text
 *----------------------------------------------------------------------*
+
 FORM display_alv .
 *  CREATE OBJECT go_cont
 *    EXPORTING
