@@ -2,6 +2,7 @@
 *&  Include           ZDEMO_OOALV_TOP
 *&---------------------------------------------------------------------*
 
+TYPE-POOLS icon.
 TABLES: scarr.
 
 DATA: go_alv TYPE REF TO cl_gui_alv_grid.
@@ -16,11 +17,16 @@ DATA: go_alv TYPE REF TO cl_gui_alv_grid.
 *      END OF gt_scarr.
 
 TYPES: BEGIN OF gty_scarr,
-         carrid   TYPE s_carr_id,
-         carrname TYPE s_carrname,
-         currcode TYPE s_currcode,
-         url      TYPE   s_carrurl,
-         cost     TYPE int4,
+         durum     TYPE icon_d,
+         carrid    TYPE s_carr_id,
+         carrname  TYPE s_carrname,
+         currcode  TYPE s_currcode,
+         url       TYPE   s_carrurl,
+         cost      TYPE int4,
+         location  TYPE char20,
+         seatl     TYPE char1,
+         seatp     TYPE char10,
+         dd_handle TYPE int4,
        END OF gty_scarr.
 
 DATA: gs_cell_color TYPE lvc_s_scol.
