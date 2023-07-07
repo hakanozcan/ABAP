@@ -68,7 +68,8 @@ AT SELECTION-SCREEN.
       CASE sy-ucomm.
         WHEN 'BUT1'.
           PERFORM display_alv.
-
+        WHEN 'BUT2'.
+          PERFORM save.
       ENDCASE.
   ENDCASE.
 
@@ -128,7 +129,17 @@ AT SELECTION-SCREEN OUTPUT.
 START-OF-SELECTION.
 
 
-  IF rb_up EQ 'X'.    "UPDATE
+
+*&---------------------------------------------------------------------*
+*&      Form  SAVE
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM save .
+IF rb_up EQ 'X'.    "UPDATE
     gs_ogrenci-ogr_ad = p_u_ad.
     gs_ogrenci-ogr_soyad = p_u_sy.
     gs_ogrenci-ogr_bolum = p_u_blm.
@@ -159,3 +170,4 @@ START-OF-SELECTION.
     ENDIF.
     CLEAR: gs_ogrenci.
   ENDIF.
+ENDFORM.
