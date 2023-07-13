@@ -17,7 +17,23 @@ DATA: gt_ogrenci      TYPE TABLE OF zdemo_ogrenci,
 DATA: gs_ogrenci TYPE zdemo_ogrenci,
       gv_last_id TYPE zdemo_ogrid_de.
 
+
+
+
+*DATA: gr_table TYPE REF TO cl_salv_table.
+*
+*DATA: gv_xstring      TYPE xstring,
+*      gv_xlen         TYPE int4,
+*      gt_binary_table TYPE solix_tab,
+*      gr_request      TYPE REF TO cl_bcs,
+*      gv_body_text    TYPE bcsy_text,
+*      gv_subject      TYPE so_obj_des,
+*      gr_recipient    TYPE REF TO if_recipient_bcs,
+*      gr_document     TYPE REF TO cl_document_bcs,
+*      gv_size         TYPE so_obj_len.
+
 INCLUDE zdemo_ogrenci_alv_frm.
+
 
 
 
@@ -53,15 +69,22 @@ INITIALIZATION.
   ELSE.
   ENDIF.
 
+
   SELECTION-SCREEN:
       PUSHBUTTON 2(10) button1 USER-COMMAND but1,
-      PUSHBUTTON 15(10) button2 USER-COMMAND but2.
+      PUSHBUTTON 15(10) button2 USER-COMMAND but2,
+      PUSHBUTTON 28(15) button3 USER-COMMAND but3.
+
 
 INITIALIZATION.
   button1 = 'ALV Göster'.
   button2 = 'Kaydet'.
+  button3 = 'Excel Export'.
+
 
 AT SELECTION-SCREEN.
+
+
   PERFORM get_data.
   CASE sy-dynnr.
     WHEN 1000.
@@ -70,10 +93,13 @@ AT SELECTION-SCREEN.
           PERFORM display_alv.
         WHEN 'BUT2'.
           PERFORM save.
+        WHEN 'BUT3'.
+          PERFORM excel.
       ENDCASE.
   ENDCASE.
 
 AT SELECTION-SCREEN OUTPUT.
+
   IF rb_in EQ 'X' .    "INSERT SEÇİLİRSE
     CLEAR: p_u_id.
     LOOP AT SCREEN.
@@ -126,6 +152,9 @@ AT SELECTION-SCREEN OUTPUT.
 
 
 
+
+
+
 START-OF-SELECTION.
 
 
@@ -139,7 +168,7 @@ START-OF-SELECTION.
 *  <--  p2        text
 *----------------------------------------------------------------------*
 FORM save .
-IF rb_up EQ 'X'.    "UPDATE
+  IF rb_up EQ 'X'.    "UPDATE
     gs_ogrenci-ogr_ad = p_u_ad.
     gs_ogrenci-ogr_soyad = p_u_sy.
     gs_ogrenci-ogr_bolum = p_u_blm.
@@ -170,4 +199,60 @@ IF rb_up EQ 'X'.    "UPDATE
     ENDIF.
     CLEAR: gs_ogrenci.
   ENDIF.
+ENDFORM.
+
+
+
+
+
+FORM mail.
+  PERFORM get_data.
+  TRY.
+      cl_salv_table=>factory(
+        IMPORTING
+          r_salv_table   =  gr_table                         " Basis Class Simple ALV Tables
+        CHANGING
+          t_table        = gt_ogrenci
+      ).
+    CATCH cx_salv_msg. " ALV: General Error Class with Message
+  ENDTRY.
+
+  TRY.
+
+      gv_xstring = gr_table->to_xml( if_salv_bs_xml=>c_type_xlsx ).
+
+      CALL FUNCTION 'SCMS_XSTRING_TO_BINARY'
+        EXPORTING
+          buffer        = gv_xstring
+        IMPORTING
+          output_length = gv_xlen
+        TABLES
+          binary_tab    = gt_binary_table.
+
+      gr_request = cl_bcs=>create_persistent( ).
+
+      APPEND 'Sample body text' TO gv_body_text.
+      gv_subject = 'Sample subject'.
+      gr_document = cl_document_bcs=>create_document(
+                      i_type         = 'RAW'
+                      i_subject      = gv_subject
+                      i_text         = gv_body_text
+
+                    ).
+      gv_size = gv_xlen.
+      gr_document->add_attachment(
+          i_attachment_type     =   'EXT'               " Document Class for Attachment
+          i_attachment_subject  =       gv_subject && '.xlsx'           " Attachment Title
+          i_attachment_size     = gv_size                 " Size of Document Content
+          i_att_content_hex     =       gt_binary_table           " Content (Binary)
+      ).
+      gr_request->set_document( gr_document ).
+
+      gr_recipient = cl_cam_address_bcs=>create_internet_address( 'hakanozcan20@hotmail.com.tr' ).
+      gr_request->add_recipient( gr_recipient ).
+      gr_request->send( ).
+      MESSAGE 'E-mail gönderildi' TYPE 'S'.
+    CATCH cx_bcs.
+      MESSAGE 'E-Mail gönderilemedi.' TYPE 'A'.
+  ENDTRY.
 ENDFORM.
