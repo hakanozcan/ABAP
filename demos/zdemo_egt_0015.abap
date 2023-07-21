@@ -1,9 +1,9 @@
 *&---------------------------------------------------------------------*
-*& Report ZBK_EGT_0015
+*& Report ZDEMO_EGT_0015
 *&---------------------------------------------------------------------*
 *&
 *&---------------------------------------------------------------------*
-REPORT zbk_egt_0015.
+REPORT ZDEMO_EGT_0015.
 
 DATA: gv_ad    TYPE char20,
       gv_soyad TYPE char30.
@@ -27,7 +27,7 @@ DATA: gv_ind TYPE i.
 
 DATA: gv_date TYPE datum.
 
-DATA: gs_log TYPE zbk_egt_0001.
+DATA: gs_log TYPE ZDEMO_EGT_0001.
 
 DATA: ok_code TYPE sy-ucomm.
 
@@ -123,7 +123,7 @@ FORM save_data .
     gs_log-cinsiyet = 'E'.
   ENDIF.
 
-  INSERT zbk_egt_0001 FROM gs_log.
+  INSERT ZDEMO_EGT_0001 FROM gs_log.
   COMMIT WORK AND WAIT.
 
   MESSAGE: 'Veriler tabloya kaydedildi!' TYPE 'I' DISPLAY LIKE 'S'.

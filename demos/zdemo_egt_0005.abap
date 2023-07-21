@@ -1,9 +1,9 @@
 *&---------------------------------------------------------------------*
-*& Report ZBK_EGT_0005
+*& Report ZDEMO_EGT_0005
 *&---------------------------------------------------------------------*
 *&
 *&---------------------------------------------------------------------*
-REPORT zbk_egt_0005.
+REPORT ZDEMO_EGT_0005.
 
 *PARAMETERS: p_num TYPE int4.
 *
@@ -62,8 +62,8 @@ REPORT zbk_egt_0005.
 *
 *ENDFORM.
 
-INCLUDE zbk_egt_0005_top.
-INCLUDE zbk_egt_0005_frm.
+INCLUDE ZDEMO_EGT_0005_TOP.
+INCLUDE ZDEMO_EGT_0005_FRM.
 
 START-OF-SELECTION.
 

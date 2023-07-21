@@ -1,12 +1,17 @@
 *&---------------------------------------------------------------------*
-*& Report ZBK_EGT_0014
+*& Report ZDEMO_EGT_0017
 *&---------------------------------------------------------------------*
 *&
 *&---------------------------------------------------------------------*
-REPORT zbk_egt_0014.
+REPORT ZDEMO_EGT_0017.
+
+CONTROLS TB_ID TYPE TABSTRIP.
+
 
 START-OF-SELECTION.
-  CALL SCREEN 0100.
+CALL SCREEN 0100.
+
+
 *&---------------------------------------------------------------------*
 *&      Module  STATUS_0100  OUTPUT
 *&---------------------------------------------------------------------*
@@ -22,17 +27,12 @@ ENDMODULE.
 *       text
 *----------------------------------------------------------------------*
 MODULE user_command_0100 INPUT.
-  DATA: lv_text TYPE char200.
-
-  CONCATENATE sy-ucomm
-              'butonuna basılmıştır.'
-  INTO lv_text SEPARATED BY space.
-
-  MESSAGE lv_text TYPE 'I'.
-
-
   CASE sy-ucomm.
-    WHEN '&BCK'.
-      LEAVE TO SCREEN 0.
+    WHEN '&BACK' OR '&EXIT'.
+      SET SCREEN 0.
+      WHEN '&TAB1'.
+        tb_id-activetab = 'TAB1'.
+      WHEN '&TAB2'.
+        tb_id-activetab = '&TAB2'.
   ENDCASE.
 ENDMODULE.
