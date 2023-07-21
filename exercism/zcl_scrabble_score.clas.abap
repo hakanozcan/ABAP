@@ -21,7 +21,7 @@ class ZCL_SCRABBLE_SCORE definition public.
   ENDMETHOD.
   endclass.
 
-
+"Iteration 2
   CLASS ZCL_SCRABBLE_SCORE DEFINITION PUBLIC .
     PUBLIC SECTION.
       METHODS score
